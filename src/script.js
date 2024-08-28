@@ -24,7 +24,7 @@ const inputsvalidate = () => {
   const send = document.querySelector(".send");
   const inputs = document.querySelectorAll("input");
   let i = 1;
-  inputsStateNumber.addEventListener("keydown", e => vehicleNumber(e));
+  inputsStateNumber.addEventListener("input", e => vehicleNumber(e));
   vehicle.addEventListener("keydown", e => setLocalStorage(e));
   date.addEventListener("change", e => setLocalStorageDate(e));
   fio.addEventListener("keydown", e => userFio(e));
@@ -44,24 +44,35 @@ const inputsvalidate = () => {
     whenissued.value = localStorage.getItem("whenissued");
   }
   getDateLocalStorage();
-  const patterns = [/^[а-яё]?$/i, /^[а-яё]\d{0,1}$/i, /^[а-яё]\d{0,2}$/i, /^[а-яё]\d{0,3}$/i, /^[а-яё]\d{3}[а-яё]?$/i, /^[а-яё]\d{3}[а-яё]{1,2}$/i, /^[а-яё]\d{3}[а-яё]{2}\d?$/i, /^[а-яё]\d{3}[а-яё]{2}\d{1,2}$/i, /^[а-яё]\d{3}[а-яё]{2}\d{1,3}$/i];
+  const patterns = [/\d/, /^[а-яё]{1}?$/i, /^[а-яё]{1}\d{1}$/i, /^[а-яё]{1}\d{2}$/i, /^[а-яё]{1}\d{3}$/i, /^[а-яё]{1}\d{3}[а-яё]{1}$/i, /^[а-яё]{1}\d{3}[а-яё]{2}$/i, /^[а-яё]{1}\d{3}[а-яё]{2}\d{1}$/i, /^[а-яё]{1}\d{3}[а-яё]{2}\d{2}$/i, /^[а-яё]{1}\d{3}[а-яё]{2}\d{3}$/i];
   const patNumber = [/^\d{1}?$/i, /^\d{2}$/i, /^\d{2}\.$/i, /^\d{2}\.\d{1}$/i, /^\d{2}\.\d{2}?$/i, /^\d{2}\.\d{2}\.$/i, /^\d{2}\.\d{2}\.\d{1}?$/i, /^\d{2}\.\d{2}\.\d{2}$/i, /^\d{2}\.\d{2}\.\d{3}$/i, /^\d{2}\.\d{2}\.\d{4}$/i];
   function vehicleNumber(e) {
-    e.preventDefault();
-
-    //допускаем только фицры и буквы
-    if (e.keyCode >= 48 && e.keyCode <= 90 && e.target.value.length < 9) {
-      e.target.value += e.key;
-      if (!patterns[e.target.value.length - 1].test(e.target.value)) {
+    if (e.target.value.length <= 9) {
+      if (patterns[e.target.value.length].test(e.target.value)) {
+        localStorage.setItem(e.target.name, e.target.value);
+      } else if (e.key === "Tab") {
+        changeFocus();
+      } else {
         e.target.value = e.target.value.slice(0, -1);
+        localStorage.setItem(e.target.name, e.target.value);
       }
-      localStorage.setItem(e.target.name, e.target.value);
-    } else if (e.keyCode === 8) {
+    } else {
       e.target.value = e.target.value.slice(0, -1);
       localStorage.setItem(e.target.name, e.target.value);
-    } else if (e.key === "Tab") {
-      changeFocus();
     }
+
+    /* if (e.keyCode >= 48 && e.keyCode <= 90 && e.target.value.length < 9) {
+    	e.target.value += e.key;
+    			if (!patterns[e.target.value.length - 1].test(e.target.value)) {
+    		e.target.value = e.target.value.slice(0, -1);
+    	}
+    	localStorage.setItem(e.target.name, e.target.value);
+    } else if (e.keyCode === 8) {
+    	e.target.value = e.target.value.slice(0, -1);
+    	localStorage.setItem(e.target.name, e.target.value);
+    } else if (e.key === "Tab") {
+    	changeFocus();
+    } */
   }
   function setLocalStorage(e) {
     e.preventDefault();
