@@ -47,6 +47,8 @@ export const inputsvalidate = () => {
 	function vehicleNumber(e) {
 		if (e.target.value.length <= 9) {
 			if (patterns[e.target.value.length].test(e.target.value)) {
+				e.target.value =
+					e.target.value[0].toLowerCase() + e.target.value.slice(1);
 				localStorage.setItem(e.target.name, e.target.value);
 			} else if (e.key === "Tab") {
 				changeFocus();
@@ -116,26 +118,19 @@ export const inputsvalidate = () => {
 		e.preventDefault();
 		if (inputsStateNumber.value.length < 7) {
 			err(inputsStateNumber);
-		}
-		if (vehicle.value === "") {
+		} else if (vehicle.value === "") {
 			err(vehicle);
-		}
-		if (date.value.length < 9) {
+		} else if (date.value.length < 9) {
 			err(date);
-		}
-		if (fio.value === "") {
+		} else if (fio.value === "") {
 			err(fio);
-		}
-		if (series.value.length < 4) {
+		} else if (series.value.length < 4) {
 			err(series);
-		}
-		if (number.value.length < 6) {
+		} else if (number.value.length < 6) {
 			err(number);
-		}
-		if (issuedbywhom.value === "") {
+		} else if (issuedbywhom.value === "") {
 			err(issuedbywhom);
-		}
-		if (whenissued.value.length < 9) {
+		} else if (whenissued.value.length < 9) {
 			err(whenissued);
 		} else {
 			const data = new FormData(form);
