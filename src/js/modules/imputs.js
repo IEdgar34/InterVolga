@@ -11,13 +11,13 @@ export const inputsvalidate = () => {
 	const inputs = document.querySelectorAll("input");
 	let i = 1;
 	inputsStateNumber.addEventListener("input", (e) => vehicleNumber(e));
-	vehicle.addEventListener("keydown", (e) => setLocalStorage(e));
+	vehicle.addEventListener("input", (e) => setLocalStorage(e));
 	date.addEventListener("change", (e) => setLocalStorageDate(e));
-	fio.addEventListener("keydown", (e) => userFio(e));
-	series.addEventListener("keydown", (e) => SeriesNumber(e));
-	number.addEventListener("keydown", (e) => SeriesNumber(e));
-	issuedbywhom.addEventListener("keydown", (e) => userFio(e));
-	whenissued.addEventListener("keydown", (e) => dateNumber(e));
+	fio.addEventListener("input", (e) => userFio(e));
+	series.addEventListener("input", (e) => SeriesNumber(e));
+	number.addEventListener("input", (e) => SeriesNumber(e));
+	issuedbywhom.addEventListener("input", (e) => userFio(e));
+	whenissued.addEventListener("input", (e) => setLocalStorageDate(e));
 	send.addEventListener("click", (e) => sendDate(e));
 
 	function getDateLocalStorage() {
@@ -32,7 +32,7 @@ export const inputsvalidate = () => {
 	}
 	getDateLocalStorage();
 	const patterns = [
-		/\d/,
+		/\""/,
 		/^[а-яё]{1}?$/i,
 		/^[а-яё]{1}\d{1}$/i,
 		/^[а-яё]{1}\d{2}$/i,
@@ -41,20 +41,7 @@ export const inputsvalidate = () => {
 		/^[а-яё]{1}\d{3}[а-яё]{2}$/i,
 		/^[а-яё]{1}\d{3}[а-яё]{2}\d{1}$/i,
 		/^[а-яё]{1}\d{3}[а-яё]{2}\d{2}$/i,
-		/^[а-яё]{1}\d{3}[а-яё]{2}\d{3}$/i,
-	];
-
-	const patNumber = [
-		/^\d{1}?$/i,
-		/^\d{2}$/i,
-		/^\d{2}\.$/i,
-		/^\d{2}\.\d{1}$/i,
-		/^\d{2}\.\d{2}?$/i,
-		/^\d{2}\.\d{2}\.$/i,
-		/^\d{2}\.\d{2}\.\d{1}?$/i,
-		/^\d{2}\.\d{2}\.\d{2}$/i,
-		/^\d{2}\.\d{2}\.\d{3}$/i,
-		/^\d{2}\.\d{2}\.\d{4}$/i,
+		/^[а-яё]{1}\d{3}[а-яё]{2}\d{0,3}$/i,
 	];
 
 	function vehicleNumber(e) {
@@ -71,63 +58,28 @@ export const inputsvalidate = () => {
 			e.target.value = e.target.value.slice(0, -1);
 			localStorage.setItem(e.target.name, e.target.value);
 		}
-
-		/* if (e.keyCode >= 48 && e.keyCode <= 90 && e.target.value.length < 9) {
-			e.target.value += e.key;
-
-			if (!patterns[e.target.value.length - 1].test(e.target.value)) {
-				e.target.value = e.target.value.slice(0, -1);
-			}
-			localStorage.setItem(e.target.name, e.target.value);
-		} else if (e.keyCode === 8) {
-			e.target.value = e.target.value.slice(0, -1);
-			localStorage.setItem(e.target.name, e.target.value);
-		} else if (e.key === "Tab") {
-			changeFocus();
-		} */
 	}
 	function setLocalStorage(e) {
-		e.preventDefault();
-
-		if (e.keyCode >= 48 && e.keyCode <= 90) {
-			e.target.value += e.key;
+		if (/^[а-яё]{1}?/g.test(e.target.value)) {
 			localStorage.setItem(e.target.name, e.target.value);
-		} else if (e.keyCode === 8) {
+		} else {
 			e.target.value = e.target.value.slice(0, -1);
 			localStorage.setItem(e.target.name, e.target.value);
-		} else if (e.keyCode === 32) {
-			e.target.value += " ";
-			localStorage.setItem(e.target.name, e.target.value);
-		} else if (e.key === "Tab") {
-			changeFocus();
 		}
 	}
 
 	function setLocalStorageDate(e) {
 		localStorage.setItem(e.target.name, e.target.value);
-		if (e.key === "Tab") {
-			changeFocus();
-		}
 	}
 	function userFio(e) {
-		e.preventDefault();
-
-		if (e.keyCode >= 65 && e.keyCode <= 90) {
-			e.target.value += e.key;
+		if (!/\d/g.test(e.target.value)) {
 			localStorage.setItem(e.target.name, e.target.value);
-		} else if (e.keyCode === 8) {
+		} else {
 			e.target.value = e.target.value.slice(0, -1);
 			localStorage.setItem(e.target.name, e.target.value);
-		} else if (e.keyCode === 32) {
-			e.target.value += " ";
-			localStorage.setItem(e.target.name, e.target.value);
-		} else if (e.key === "Tab") {
-			changeFocus();
 		}
 	}
 	function SeriesNumber(e) {
-		e.preventDefault();
-
 		if (e.target.name === "series") {
 			c(4, e);
 		} else if (e.target.name === "number") {
@@ -135,50 +87,15 @@ export const inputsvalidate = () => {
 		}
 
 		function c(n, e) {
-			if (
-				e.keyCode >= 49 &&
-				e.keyCode <= 57 &&
-				e.target.value.length < n
-			) {
-				e.target.value += e.key;
+			if (/\d/g.test(e.target.value) && e.target.value.length <= n) {
 				localStorage.setItem(e.target.name, e.target.value);
-			} else if (e.keyCode === 8) {
+			} else {
 				e.target.value = e.target.value.slice(0, -1);
 				localStorage.setItem(e.target.name, e.target.value);
-			} else if (e.key === "Tab") {
-				changeFocus();
 			}
 		}
 	}
-	function dateNumber(e) {
-		e.preventDefault();
-		if (e.keyCode >= 49 && e.keyCode <= 57 && e.target.value.length < 10) {
-			e.target.value += e.key;
 
-			if (!patNumber[e.target.value.length - 1].test(e.target.value)) {
-				e.target.value = e.target.value.slice(0, -1);
-				e.target.value += ".";
-			}
-			localStorage.setItem(e.target.name, e.target.value);
-		} else if (e.keyCode === 8) {
-			e.target.value = e.target.value.slice(0, -1);
-			localStorage.setItem(e.target.name, e.target.value);
-		} else if (e.key === "Tab") {
-			changeFocus();
-		}
-	}
-
-	function changeFocus() {
-		if (inputs[i + 1]) {
-			inputs[i + 1].focus();
-		}
-	}
-	inputs.forEach((item) => {
-		item.addEventListener("focus", (e) => {
-			i = Array.from(inputs).indexOf(e.target);
-			console.log(i);
-		});
-	});
 	//
 	const formOpen = document.querySelector(".form__link");
 	const formClose = document.querySelector(".form__close");
@@ -218,11 +135,11 @@ export const inputsvalidate = () => {
 		if (issuedbywhom.value === "") {
 			err(issuedbywhom);
 		}
-		if (whenissued.value.length < 10) {
+		if (whenissued.value.length < 9) {
 			err(whenissued);
 		} else {
 			const data = new FormData(form);
-			localStorage.setItem("date", data);
+			localStorage.setItem("data", data);
 			inputs.forEach((item) => {
 				item.value = "";
 			});
