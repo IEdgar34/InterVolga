@@ -103,16 +103,17 @@ export const inputsvalidate = () => {
 	const formCloseBtn = document.querySelector(".form__closebtn");
 	const formWrap = document.querySelector(".form");
 	const form = document.querySelector("form");
+	const wrapper = document.querySelector(".wrapper");
 
 	formOpen.addEventListener("click", (e) => {
 		formWrap.classList.add("form_active");
-		document.body.overflow = "hidden";
+		wrapper.style.overflow = "hidden";
 	});
 	formClose.addEventListener("click", (e) => formCloseF());
 	formCloseBtn.addEventListener("click", (e) => formCloseF());
 	function formCloseF() {
 		formWrap.classList.remove("form_active");
-		document.body.overflow = "";
+		wrapper.style.overflow = "";
 	}
 	//
 	function sendDate(e) {
