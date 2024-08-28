@@ -48,7 +48,7 @@ const inputsvalidate = () => {
   function vehicleNumber(e) {
     if (e.target.value.length <= 9) {
       if (patterns[e.target.value.length].test(e.target.value)) {
-        e.target.value = e.target.value[0].toLowerCase() + e.target.value.slice(1);
+        e.target.value = e.target.value.toUpperCase();
         localStorage.setItem(e.target.name, e.target.value);
       } else if (e.key === "Tab") {
         changeFocus();
@@ -104,11 +104,13 @@ const inputsvalidate = () => {
   const form = document.querySelector("form");
   formOpen.addEventListener("click", e => {
     formWrap.classList.add("form_active");
+    document.body.overflow = "hidden";
   });
   formClose.addEventListener("click", e => formCloseF());
   formCloseBtn.addEventListener("click", e => formCloseF());
   function formCloseF() {
     formWrap.classList.remove("form_active");
+    document.body.overflow = "";
   }
   //
   function sendDate(e) {
